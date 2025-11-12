@@ -1,72 +1,87 @@
-import './App.css'
+import { useState, useId } from "react"
+
 
 
 //* 1st Input *//
 
-function App(props) {
+function App() {
+
+const [todos, setTodos] = useState([])
+const [input, setInput] = useState('')
+
+
+const handleTodo = (e) => {
+  e.preventDefault()
+  if(!input.trim()) return
+
+  const newTodo = {
+      id: crypto.randomUUID(),
+      text: input,
+      completed: false
+
+  }
+
+    setTodos([newTodo, ...todos])
+    setInput('')
+}
+
+const toggleComplete = (id) => {
+  setTodos (
+    todos.map((todo) =>
+      todo.id === id ? {...todo, completed: !todo.completed} :todo
+    )
+  )
+}
+
+const handleDelete = (id) => {
+  setTodos(todos.filter((todo) => todo.id !==id))
+}
+
   return (
+    <div>
     <div className="todoapp stack-large">
       <h1>Create Todo List</h1>
-      <input type="text" id="first-todo-input" name="text" />
-      <button type="submit" className="btn btn__primary btn__lg">
-        Add
-      </button>
-
-      {/* End 1st Input */}https://github.com/lesliewilson1/ALAB_320H.9.1_Building_a_Todo_List
-
-
-      {/* Create Mockup */}
-
-      <div>
-        <input id="todo-0" type="checkbox" />
-        <label className="todo-label" htmlFor="todo-0">
-          Create Mockup
-        </label>
-      </div>
-
-      <div className="btn-group">
-        <button type="button" className="btn">
-          Edit
+      <form onSubmit={handleTodo}>
+        <input 
+          type="text" 
+          id="first-todo-input" 
+          placeholder="Add a task"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+        
+        />
+        <button
+          type="submit" 
+          className="btn">
+          Add
         </button>
-        <button type="button" className="btn btn__danger">
-          Delete
-        </button>
-      </div>
+        
+      </form>
 
-      {/* End Mockup */}
+      {/* End 1st Input */}
 
 
-      {/* Create Static */}
-
-      <div className="c-cb">
-        <input id="todo-1" type="checkbox" />
-        <label className="todo-label" htmlFor="todo-1">
-          Create Static Layout
-        </label>
-      </div>
-      <div className="btn-group">
-        <button type="button" className="btn">
-          Edit
-        </button>
-        <button type="button" className="btn btn__danger">
-          Delete
-        </button>
-      </div>
-
-      {/* End Static */}
 
 
-      {/* 2nd Input */}
+    <ul>
+     {todos.map((todo) => (
 
-      <input id="todo-2" type="checkbox" />
-      <input type="text" id="second-todo-input" name="text" />
-      <button type="submit" className="btn btn__primary btn__lg">
-        Add
-      </button>
+      <li key={todo.id} className={todo.completed ? 'completed' : ''} >
 
-      {/* 2nd Input */}
-      
+        <span onClick={() => toggleComplete(todo.id)}>{todo.text}</span>
+        <input type="checkbox" />
+        <button onClick={() => handleDelete(todo.id)}>🗑️</button>        
+        
+      </li>  
 
+     )
+    )}
+        
+
+
+      </ul>
+    
+    </div>
     </div>
   );
 }
