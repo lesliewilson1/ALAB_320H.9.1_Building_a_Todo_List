@@ -1,6 +1,6 @@
+
 import { useState, useId } from "react"
-
-
+import './App.css'
 
 //* 1st Input *//
 
@@ -8,11 +8,20 @@ function App() {
 
 const [todos, setTodos] = useState([])
 const [input, setInput] = useState('')
-
+const [edit, setEdit] = useState('')
 
 const handleTodo = (e) => {
   e.preventDefault()
   if(!input.trim()) return
+
+  if (edit) {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === edit ? { ...todo, text: input } : todo
+      )
+    )
+    setEdit('')
+  } else {
 
   const newTodo = {
       id: crypto.randomUUID(),
@@ -20,9 +29,11 @@ const handleTodo = (e) => {
       completed: false
 
   }
-
-    setTodos([newTodo, ...todos])
+  setTodos([newTodo, ...todos])
     setInput('')
+}
+    
+
 }
 
 const toggleComplete = (id) => {
@@ -37,10 +48,16 @@ const handleDelete = (id) => {
   setTodos(todos.filter((todo) => todo.id !==id))
 }
 
+const handleEdit = (id) => {
+  const todoToEdit = todos.find((todo) => todo.id === id)
+  setInput(todoToEdit.text)
+  setEdit(id)
+}
+
   return (
     <div>
     <div className="todoapp stack-large">
-      <h1>Create Todo List</h1>
+      <h1>Todo List</h1>
       <form onSubmit={handleTodo}>
         <input 
           type="text" 
@@ -71,7 +88,7 @@ const handleDelete = (id) => {
         <span onClick={() => toggleComplete(todo.id)}>{todo.text}</span>
         <input type="checkbox" />
         <button onClick={() => handleDelete(todo.id)}>🗑️</button>        
-        
+        <button onClick={() => handleEdit(todo.id)}>✏️</button>
       </li>  
 
      )
