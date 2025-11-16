@@ -29,9 +29,8 @@ const handleTodo = (e) => {
 
   }
   setTodos([newTodo, ...todos])
-    setInput('')
 }
-    
+       setInput('') 
 
 }
 
@@ -66,10 +65,12 @@ const handleEdit = (id) => {
           onChange={(e) => setInput(e.target.value)}
         
         />
+        
         <button
           type="submit" 
           className="btn">
-          Add
+            {edit ? 'Save' : 'Add'}
+          
         </button>
         
       </form>
