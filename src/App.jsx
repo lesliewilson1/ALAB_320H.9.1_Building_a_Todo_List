@@ -2,7 +2,6 @@
 import { useState, useId } from "react"
 import './App.css'
 
-//* 1st Input *//
 
 function App() {
 
